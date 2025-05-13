@@ -1,1 +1,0 @@
-# shopada-pinatubo-bauzon_manaoat_ubando
