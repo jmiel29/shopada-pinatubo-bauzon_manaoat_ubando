@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CS3_4QSA</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dongle&family=Inclusive+Sans&family=Manjari:wght@100;400;700&family=Poppins:wght@400;600;800&family=Zain&display=swap');
+
+    body {
+        background-image: url('porketplace_logo.png');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+    }
+
+    #navbar {
+        width: 100%;
+        height: 140px;
+        padding-top: 20px;
+        background-color: #d39db7;
+    }
+
+    h1 {
+        font-family: "Poppins", sans-serif;
+        font-weight: 800;
+        color: white;
+    }
+
+    .vr {
+        width: 5px;
+        height: 100px;
+        background-color: white;
+        border: none;
+    }
+
+    a {
+        color: white;
+        text-decoration: none;
+        font-family: "Manjari", sans-serif;
+        font-weight: 700;
+        font-size: x-large;
+        padding-right: 20px;
+    }
+
+    a:hover {
+        color: white;
+        text-decoration: underline;
+    }
+
+    .section-header {
+        font-family: "Poppins", sans-serif;
+        font-weight: 800;
+        color: #fff;
+        background-color: #d39db7;
+        padding: 10px 20px;
+        margin-top: 30px;
+        border-radius: 5px;
+        text-align: center;
+    }
+
+    .card-img-top {
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .card-title {
+        font-family: "Poppins", sans-serif;
+        font-weight: 600;
+    }
+
+    .card-text {
+        font-family: "Manjari", sans-serif;;
+    }
+
+    .card-footer-text {
+        font-family: "Manjari", sans-serif;
+        color: gray;
+    }
+
+    .card-container {
+        padding: 30px;
+    }
+    h5{
+        font-family: "Dongle", sans-serif;;
+    }
+    .btn {
+        background-color: #d39db7;
+        color: white;
+        border: none;
+        font-family: "Dongle", sans-serif;
+        font-size: large;
+        font-weight: 400;
+        text-align: right;
+        margin-top: auto;
+    }
+    .section-header {
+        margin-bottom: 20px;
+    }
+    .card-container .col {
+        padding: 10px;
+        margin-bottom: 20px;  
+    }
+    .sidebar {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #111;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+.sidebar a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+.sidebar a:hover {
+  color: #f1f1f1;
+}
+.sidebar .closebtn {
+  position: absolute;
+  top: 0;
+  right: 25px;
+  font-size: 36px;
+  margin-left: 50px;
+}
+.openbtn {
+  font-size: 20px;
+  cursor: pointer;
+  background-color: #ff007b;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+}
+.openbtn:hover {
+  background-color: #bfbfbf;
+}
+#main {
+  transition: margin-left .5s;
+  padding: 16px;
+}
+@media screen and (max-height: 450px) {
+  .sidebar {padding-top: 15px;}
+  .sidebar a {font-size: 18px;}
+}
+.white{
+  color: white;
+} 
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+.pageColor{
+    color: rgb(115, 115, 255);
+  }
+  </style>
+
+
+
+<script>
+  let cart = [];
+
+function addToCart(productName, productPrice) {
+  let price = parseFloat(productPrice);
+  if (isNaN(price)) {
+    alert("Invalid price for " + productName);
+    return;
+  }
+  cart.push({ prod_name: productName, prod_price: price });
+  updateCartDisplay();
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  updateCartDisplay();
+}
+
+function updateCartDisplay() {
+  let cartItems = document.getElementById("cart-items");
+  let cartTotal = document.getElementById("cart-total");
+  let custOrderInput = document.getElementById("cust_order");
+
+  cartItems.innerHTML = "";
+  let total = 0;
+
+  cart.forEach((item, index) => {
+    let li = document.createElement("li");
+    li.textContent = `${item.prod_name} - Php ${item.prod_price.toFixed(2)}`;
+
+    let removeButton = document.createElement("button");
+    removeButton.type = "button";
+    removeButton.textContent = "Remove";
+    removeButton.onclick = () => removeFromCart(index);
+
+    li.appendChild(removeButton);
+    cartItems.appendChild(li);
+
+    total += item.prod_price;
+  });
+
+  cartTotal.textContent = total.toFixed(2);
+  custOrderInput.value = JSON.stringify(cart);
+}
+
+function openNav() {
+  document.getElementById("mySidebar").style.width = "250px";
+  document.getElementById("main").style.marginLeft = "250px";
+}
+
+function closeNav() {
+  document.getElementById("mySidebar").style.width = "0";
+  document.getElementById("main").style.marginLeft = "0";
+}
+
+  </script>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="d-flex align-items-center gap-4 px-4">
+            <h1 class="m-0">PORKETPLACE</h1>
+            <div class="vr"></div>
+            <a href="CSSA.html">HOME</a>
+            <a href="Developers.html">DEVELOPERS</a>
+            <a href="Category.html" class="pageColor">DELIVERY</a>
+            <button class="openbtn" onclick="openNav()">Checkout</button>
+            <div id="mySidebar" class="sidebar">
+              <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">x</a>
+              <div class="white container">
+                <h3>DELIVERY INFO</h3>
+                <br>
+                <div id="cart">
+                  <h3>Cart</h3>
+                  <ul id="cart-items"></ul>
+                  <p>Total: <span id="cart-total">0</span></p>
+                </div>
+                <form id="checkout-form" method="post" action="http://47.129.9.35/cs3/checkout.php">
+                  <input type="text" name="cust_name" placeholder="Full Name" required><br>
+                  <input type="text" name="cust_email" placeholder="Email" required><br>
+                  <input type="text" name="cust_addr" placeholder="Delivery Address" required><br>
+                  <input type="hidden" name="cust_order" id="cust_order">
+                  <button type="submit">Place Order</button>
+                </form>
+                
+
+              </div>
+            </div>
+        </div>
+ </nav>
+  <div class="container-fluid card-container">
+    <h2 class="section-header">Pork</h2>
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4">
+      <div class="col">
+        <div class="card h-100">
+          <img src="p1.png" class="card-img-top" alt="P1">
+          <div class="card-body text-center">
+            <h5 class="card-title">Binagoongan Baboy</h5>
+            <p class="card-text">Pork belly simmered in bagoong sauce with tomatoes and fried eggplants.</p>
+            <p class="card-footer-text">₱180.00</p>
+            <button type="button" onclick="addToCart('Binagoongan Baboy', 180.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#binagoongan">Add to Cart</button>
+            
+            <div class="modal" id="binagoongan">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="p2.png" class="card-img-top" alt="P2">
+          <div class="card-body text-center">
+            <h5 class="card-title">Inihaw na Baboy</h5>
+            <p class="card-text">Charcoa slowly grilled marinated pork belly with vinegar on the side.</p>
+            <p class="card-footer-text">₱170.00</p>
+            <button type="button" onclick="addToCart('Inihaw na Baboy', 170.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#inihaw">Add to Cart</button>
+            <div class="modal" id="inihaw">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="p3.png" class="card-img-top" alt="P3">
+          <div class="card-body text-center">
+            <h5 class="card-title">Lechon Kawali</h5>
+            <p class="card-text">Boiled and deep fried until crispy, served with cucumber and Mang Tomas sauce.</p>
+            <p class="card-footer-text">₱200.00</p>
+            <button type="button" onclick="addToCart('Lechon Kawali', 200.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#lechon">Add to Cart</button>
+            <div class="modal" id="lechon">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="p4.png" class="card-img-top" alt="P4">
+          <div class="card-body text-center">
+            <h5 class="card-title">Pork Adobo</h5>
+            <p class="card-text">A classic pork dish stewed in soy sauce, vinegar, garlic, and bay leaves.</p>
+            <p class="card-footer-text">₱350.00</p>
+            <button type="button" onclick="addToCart('Pork Adobo', 350.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#adobo">Add to Cart</button>
+            <div class="modal" id="adobo">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="p5.png" class="card-img-top" alt="P5">
+          <div class="card-body text-center">
+            <h5 class="card-title">Sizzling Sisig</h5>
+            <p class="card-text">Chopped pig head and liver mixed with onions, chillies, and calamansi.</p>
+            <p class="card-footer-text">₱200.00</p>
+            <button type="button" onclick="addToCart('Sizzling Sisig', 200.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#sisig">Add to Cart</button>
+            <div class="modal" id="sisig">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-header">Beef</h2>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4">
+      <div class="col">
+        <div class="card h-100">
+          <img src="b1.png" class="card-img-top" alt="B1">
+          <div class="card-body text-center">
+            <h5 class="card-title">Beef Pares</h5>
+            <p class="card-text">Sweet-savory beef stew served with garlic rice and clear broth.</p>
+            <p class="card-footer-text">₱170.00</p>
+            <button type="button" onclick="addToCart('Beef Pares', 170.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#pares">Add to Cart</button>
+            <div class="modal" id="pares">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="b2.png" class="card-img-top" alt="B2">
+          <div class="card-body text-center">
+            <h5 class="card-title">Beef Steak</h5>
+            <p class="card-text">Beef slices in soy-calamansi sauce with onions.</p>
+            <p class="card-footer-text">₱250.00</p>
+            <button type="button" onclick="addToCart('Beef Steak', 250.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#steak">Add to Cart</button>
+            <div class="modal" id="steak">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="b3.png" class="card-img-top" alt="B3">
+          <div class="card-body text-center">
+            <h5 class="card-title">Bulalo</h5>
+            <p class="card-text">Beef soup with marrow, corn, cabbage.</p>
+            <p class="card-footer-text">₱350.00</p>
+            <button type="button" onclick="addToCart('Bulalo', 350.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#bulalo">Add to Cart</button>
+            <div class="modal" id="bulalo">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="b4.png" class="card-img-top" alt="B4">
+          <div class="card-body text-center">
+            <h5 class="card-title">Kare Kare</h5>
+            <p class="card-text">Beef in sour broth with assorted vegetables.</p>
+            <p class="card-footer-text">₱230.00</p>
+            <button type="button" onclick="addToCart('Kare Kare', 230.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#kare">Add to Cart</button>
+            <div class="modal" id="kare">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="b5.png" class="card-img-top" alt="B5">
+          <div class="card-body text-center">
+            <h5 class="card-title">Sinigang na Baka</h5>
+            <p class="card-text">Juicy Filipino-style bistek tagalog with onion rings.</p>
+            <p class="card-footer-text">₱249.00</p>
+            <button type="button" onclick="addToCart('Sinigang na Baka', 249.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#bistek">Add to Cart</button>
+            <div class="modal" id="bistek">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-header">Chicken</h2>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4">
+      <div class="col">
+        <div class="card h-100">
+          <img src="c1.png" class="card-img-top" alt="C1">
+          <div class="card-body text-center">
+            <h5 class="card-title">Afritada</h5>
+            <p class="card-text">Chicken stewed in tomato sauce with carrots, potatoes, and bell peppers.</p>
+            <p class="card-footer-text">₱150.00</p>
+            <button type="button" onclick="addToCart('Afritada', 150.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#afritada">Add to Cart</button>
+            <div class="modal" id="afritada">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="c2.png" class="card-img-top" alt="C2">
+          <div class="card-body text-center">
+            <h5 class="card-title">Arozzcaldo</h5>
+            <p class="card-text">Rice porridge with chicken, egg, ginger, and toasted garlic, served with puto.</p>
+            <p class="card-footer-text">₱120.00</p>
+            <button type="button" onclick="addToCart('Arozzcaldo', 120.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#arozzcaldo">Add to Cart</button>
+            <div class="modal" id="arozzcaldo">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="c3.png" class="card-img-top" alt="C3">
+          <div class="card-body text-center">
+            <h5 class="card-title">Chicken Inasal</h5>
+            <p class="card-text">Grilled chicken marinated in calamansi, garlic, and annatto oil.</p>
+            <p class="card-footer-text">₱150.00</p>
+            <button type="button" onclick="addToCart('Chicken Inasal', 150.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#cinasal">Add to Cart</button>
+            <div class="modal" id="cinasal">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="c4.webp" class="card-img-top" alt="C4">
+          <div class="card-body text-center">
+            <h5 class="card-title">KFC</h5>
+            <p class="card-text">Deep-fried crispy chicken, Kanto Fried Chicken flavor.</p>
+            <p class="card-footer-text">₱130.00</p>
+            <button type="button" onclick="addToCart('KFC', 130.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#kfc">Add to Cart</button>
+            <div class="modal" id="kfc">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="c5.png" class="card-img-top" alt="C5">
+          <div class="card-body text-center">
+            <h5 class="card-title">Tinola</h5>
+            <p class="card-text">A nostalgic soup with green papaya, malunggay, and ginger broth.</p>
+            <p class="card-footer-text">₱120.00</p>
+            <button type="button" onclick="addToCart('Tinola', 120.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#tinola">Add to Cart</button>
+            <div class="modal" id="tinola">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="section-header">Merch</h2>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-4 mb-5">
+      <div class="col">
+        <div class="card h-100">
+          <img src="m1.png" class="card-img-top" alt="M1">
+          <div class="card-body text-center">
+            <h5 class="card-title">PorketShirt</h5>
+            <p class="card-text">Official PorketPlace cotton shirt, black edition.</p>
+            <p class="card-footer-text">₱190293.00</p>
+            <button type="button" onclick="addToCart('PorketShirt', 190293.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#shirt">Add to Cart</button>
+            <div class="modal" id="shirt">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="m2.png" class="card-img-top" alt="M2">
+          <div class="card-body text-center">
+            <h5 class="card-title">PorketShoes</h5>
+            <p class="card-text">Official PorketPlace shoes,white edition.</p>
+            <p class="card-footer-text">₱210380.00</p>
+            <button type="button" onclick="addToCart('PorketShoes', 210380.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#shoe">Add to Cart</button>
+            <div class="modal" id="shoe">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="m3.png" class="card-img-top" alt="M3">
+          <div class="card-body text-center">
+            <h5 class="card-title">PorketCap</h5>
+            <p class="card-text">Official PorketPlace cap, black edition.</p>
+            <p class="card-footer-text">₱2038028.00</p>
+            <button type="button" onclick="addToCart('PorketCap', 2038028.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#cap">Add to Cart</button>
+            <div class="modal" id="cap">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="m4.png" class="card-img-top" alt="M4">
+          <div class="card-body text-center">
+            <h5 class="card-title">PorketTote</h5>
+            <p class="card-text">Official PorketPlace tote bag, white edition.</p>
+            <p class="card-footer-text">₱50283023.00</p>
+            <button type="button" onclick="addToCart('PorketTote', 50283023.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#tote">Add to Cart</button>
+            <div class="modal" id="tote">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col">
+        <div class="card h-100">
+          <img src="m5.png" class="card-img-top" alt="M5">
+          <div class="card-body text-center">
+            <h5 class="card-title">PorketCup</h5>
+            <p class="card-text">Official PorketPlace cup, white edition.</p>
+            <p class="card-footer-text">₱29032930920.00</p>
+            <button type="button" onclick="addToCart('PorketCup', 29032930920.00)" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#cup">Add to Cart</button>
+            <div class="modal" id="cup">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h4 class="modal-title">Added to Cart 🛒</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                  </div>
+                  <div class="modal-body">
+                    Added to cart!
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+   
+  </div>
+</body>
+</html>
